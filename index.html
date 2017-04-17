@@ -1,11 +1,14 @@
-﻿
+
 
 <html>
+
 <head>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet" />
+
 </head>
 <body ng-app="app" ng-controller="appCtrl" ng-init="init()">
+
     <div class="form-group">
         <div class="col-md-6">
             <div class="form-group">
@@ -36,6 +39,7 @@
                     <textarea class="form-control" ng-model="onlineExample.ExampleLink" placeholder="ExampleLink"></textarea>
                     <center><button class="btn  btn-block btn-primary" type="button" ng-click="addOnlineExampleLink(onlineExample)">+</button></center>
                 </div>
+
             </div>
         </div>
         <button class="btn btn-primary" ng-click="Save()">
@@ -43,6 +47,7 @@
         </button>
         <button class="btn btn-primary" ng-click="ShowTable=true">Show Table</button>
         <button class="btn btn-primary" ng-click="ShowTable=false">Hide Table</button>
+
         <div class="col-md-6 table-responsive">
             <div ng-if="ShowTable==true">
                 <input class="form-control" type="text" name="filer" ng-model="filterSearch" placeholder="Please type to Search ......" />
@@ -64,7 +69,7 @@
                             </td>
                             <td>
                                 <span ng-repeat="values in value.Answers track by $index">
-                                    <p style="width:50%">{{values|}}</p>
+                                    <p style="width:50%">{{values}}</p>
                                 </span>
                             </td>
                             <td>
@@ -90,6 +95,7 @@
                     </tbody>
                 </table>
             </div>
+
             <div ng-if="ShowTable==false">
                 <div>
                     Language :{{LanguageOption}}
@@ -143,6 +149,8 @@
                 </div>
             </div>
         </div>
+
+
 
 
         <script src="script/angular.min.js"></script>
@@ -216,7 +224,7 @@
                         $scope.OnlineExampleLink = [];
                         $scope.Answer = [];
                         $scope.Image = [];
-                        $scope.app = { Answers: [],ImageUrls:[],OnlineExampleLinks:[],Questions:[],ReferenceLinks:[], IsApproped: true, AddedbyUser: 'Admin', AddedTimeStap: new Date().valueOf(), NegativeAddedTimeStap: -new Date().valueOf() };
+                        $scope.app = { IsApproped: true, AddedbyUser: 'Admin', AddedTimeStap: new Date().valueOf(), NegativeAddedTimeStap: -new Date().valueOf() };
 
                         $scope.addQuestions = function (Question) {
                             $scope.Question.push(Question);
@@ -252,12 +260,13 @@
                         }
                         $scope.Save = function () {
                             if ($scope.LanguageOption != '') {
+                                 
                                 $scope.DB.$add($scope.app);
                                 $scope.Question = [];
                                 $scope.Answer = [];
                                 $scope.Image = [];
                                 $scope.ReferenceLinks = [];
-                                $scope.app = { Answers: [], ImageUrls: [], OnlineExampleLinks: [], Questions: [], ReferenceLinks: [], IsApproped: true, AddedbyUser: 'Admin', AddedTimeStap: new Date().valueOf(), NegativeAddedTimeStap: -new Date().valueOf() };
+                                $scope.app = { IsApproped: true, AddedbyUser: 'Admin', AddedTimeStap: new Date().valueOf(), NegativeAddedTimeStap: -new Date().valueOf() };
                             }
                             else {
                                 alert('Please select Language from drop down');
