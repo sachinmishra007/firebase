@@ -3,10 +3,9 @@
 <html>
 <head>
     <link rel="stylesheet" href="css/bootstrap.min.css">
-     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
 </head>
 <body ng-app="app" ng-controller="appCtrl" ng-init="init()">
-
     <div class="form-group">
         <div class="col-md-6">
             <div class="form-group">
@@ -37,7 +36,6 @@
                     <textarea class="form-control" ng-model="onlineExample.ExampleLink" placeholder="ExampleLink"></textarea>
                     <center><button class="btn  btn-block btn-primary" type="button" ng-click="addOnlineExampleLink(onlineExample)">+</button></center>
                 </div>
-
             </div>
         </div>
         <button class="btn btn-primary" ng-click="Save()">
@@ -45,10 +43,9 @@
         </button>
         <button class="btn btn-primary" ng-click="ShowTable=true">Show Table</button>
         <button class="btn btn-primary" ng-click="ShowTable=false">Hide Table</button>
-
         <div class="col-md-6 table-responsive">
             <div ng-if="ShowTable==true">
-                <input class="form-control" type="text" name="filer" ng-model="filterSearch" placeholder="Please type to Search ......"/>
+                <input class="form-control" type="text" name="filer" ng-model="filterSearch" placeholder="Please type to Search ......" />
                 <table style="width:100%" class="table table-bordered table-condensed table-stripped table-stripped ">
                     <thead>
                     <th>Question</th>
@@ -67,7 +64,7 @@
                             </td>
                             <td>
                                 <span ng-repeat="values in value.Answers track by $index">
-                                    <p style="width:50%">{{values}}</p>
+                                    <p style="width:50%">{{values|}}</p>
                                 </span>
                             </td>
                             <td>
@@ -93,7 +90,6 @@
                     </tbody>
                 </table>
             </div>
-
             <div ng-if="ShowTable==false">
                 <div>
                     Language :{{LanguageOption}}
@@ -116,7 +112,7 @@
                         <li class="list-group-item" ng-repeat="answer in app.Answers track by $index">
                             <b>{{$index+1}})</b>  {{answer}}
                         </li>
-                    </ul>                    
+                    </ul>
                     <ul class="list-group">
                         <li class="list-group-item active">
                             ImageUrl
@@ -125,7 +121,7 @@
                         <li class="list-group-item" ng-repeat="imag in app.ImageUrls track by $index">
                             <b>{{$index+1}})</b>  {{imag}}
                         </li>
-                    </ul>                    
+                    </ul>
                     <ul class="list-group">
                         <li class="list-group-item active">
                             Reference Link
@@ -147,8 +143,6 @@
                 </div>
             </div>
         </div>
-
-
 
 
         <script src="script/angular.min.js"></script>
@@ -222,7 +216,7 @@
                         $scope.OnlineExampleLink = [];
                         $scope.Answer = [];
                         $scope.Image = [];
-                        $scope.app = { IsApproped: true, AddedbyUser: 'Admin', AddedTimeStap: new Date().valueOf(), NegativeAddedTimeStap: -new Date().valueOf() };
+                        $scope.app = { Answers: [],ImageUrls:[],OnlineExampleLinks:[],Questions:[],ReferenceLinks:[], IsApproped: true, AddedbyUser: 'Admin', AddedTimeStap: new Date().valueOf(), NegativeAddedTimeStap: -new Date().valueOf() };
 
                         $scope.addQuestions = function (Question) {
                             $scope.Question.push(Question);
@@ -263,7 +257,7 @@
                                 $scope.Answer = [];
                                 $scope.Image = [];
                                 $scope.ReferenceLinks = [];
-                                $scope.app = { IsApproped: true, AddedbyUser: 'Admin', AddedTimeStap: new Date().valueOf(), NegativeAddedTimeStap: -new Date().valueOf() };
+                                $scope.app = { Answers: [], ImageUrls: [], OnlineExampleLinks: [], Questions: [], ReferenceLinks: [], IsApproped: true, AddedbyUser: 'Admin', AddedTimeStap: new Date().valueOf(), NegativeAddedTimeStap: -new Date().valueOf() };
                             }
                             else {
                                 alert('Please select Language from drop down');
