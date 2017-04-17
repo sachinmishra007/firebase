@@ -2,227 +2,284 @@
 
 <html>
 <head>
-
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet" />
 
 </head>
 <body ng-app="app" ng-controller="appCtrl" ng-init="init()">
-    <div>
-        Language :{{LanguageOption}}
-        <!--{{app|json}}-->
-        <br />
-        Questions :
-        <li ng-repeat="ques in app.Questions track by $index">
-            {{$index+1}} {{ques}} OR
-        </li><br />
-        Answers :
-        <li ng-repeat="answer in app.Answers track by $index">
-            {{$index+1}}  {{answer}}
-        </li><br />
-        ImageUrl:
-        <li ng-repeat="imag in app.ImageUrls track by $index">
-            {{$index+1}}  {{imag}}
-        </li><br />
-        Reference Link:
-        <li ng-repeat="refer in app.ReferenceLinks track by $index">
-            {{$index+1}} {{refer.ReferTitle}} - >  {{refer.ReferLink}}
-        </li><br />
-        Online Example Link:
-        <li ng-repeat="refer in app.OnlineExampleLinks track by $index">
-            {{$index+1}} {{refer.ExampleTitle}} - >  {{refer.ExampleLink}}
-        </li>
-    </div>
-    <br />
-    <select ng-model="LanguageOption" ng-options="l.value as l.title for l in LangOptions" ng-change="LoadData(LanguageOption)">
-        <option value="" selected>-----------Select------------</option>
-    </select>
-    <br />
-    <textarea ng-model="QuestionModel" placeholder="Question"></textarea>
-    <button type="button" ng-click="addQuestions(QuestionModel)">+</button>
-    <br />
 
-    <textarea ng-model="AnswerModel" placeholder="Answer"></textarea>
-    <button type="button" ng-click="addAnswer(AnswerModel)">+</button>
-    <br />
-    <textarea ng-model="ImageUrl" placeholder="ImageUrl"></textarea>
-    <button type="button" ng-click="addImage(ImageUrl)">+</button>
-    <br />
-    <textarea ng-model="refer.ReferTitle" placeholder="ReferenceTitle"></textarea>
-    <textarea ng-model="refer.ReferLink" placeholder="ReferenceLink"></textarea>
-    <button type="button" ng-click="addReferenceLink(refer)">+</button>
-    <br />
-    <textarea ng-model="onlineExample.ExampleTitle" placeholder="ExampleTitle"></textarea>
-    <textarea ng-model="onlineExample.ExampleLink" placeholder="ExampleLink"></textarea>
-    <button type="button" ng-click="addOnlineExampleLink(onlineExample)">+</button>
-    <button ng-click="Save()">
-        Save
-    </button>
+    <div class="form-group">
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <select class="form-control" ng-model="LanguageOption" ng-options="l.value as l.title for l in LangOptions" ng-change="LoadData(LanguageOption)">
+                        <option value="" selected>-----------Select------------</option>
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <textarea class="form-control" ng-model="QuestionModel" placeholder="Question"></textarea>
+                    <center><button class="btn  btn-block btn-primary" type="button" ng-click="addQuestions(QuestionModel)">+</button></center>
+                </div>
+                <div class="col-md-12">
+                    <textarea class="form-control" ng-model="AnswerModel" placeholder="Answer"></textarea>
+                    <center><button class="btn  btn-block btn-primary" type="button" ng-click="addAnswer(AnswerModel)">+</button></center>
+                </div>
+                <div class="col-md-12">
+                    <textarea class="form-control" ng-model="ImageUrl" placeholder="ImageUrl"></textarea>
+                    <center><button class="btn  btn-block btn-primary" type="button" ng-click="addImage(ImageUrl)">+</button></center>
+                </div>
+                <div class="col-md-12">
+                    <textarea class="form-control" ng-model="refer.ReferTitle" placeholder="ReferenceTitle"></textarea>
+                    <textarea class="form-control" ng-model="refer.ReferLink" placeholder="ReferenceLink"></textarea>
+                    <center><button class="btn   btn-block btn-primary" type="button" ng-click="addReferenceLink(refer)">+</button></center>
+                </div>
+                <div class="col-md-12">
+                    <textarea class="form-control" ng-model="onlineExample.ExampleTitle" placeholder="ExampleTitle"></textarea>
+                    <textarea class="form-control" ng-model="onlineExample.ExampleLink" placeholder="ExampleLink"></textarea>
+                    <center><button class="btn  btn-block btn-primary" type="button" ng-click="addOnlineExampleLink(onlineExample)">+</button></center>
+                </div>
 
-    <table style="width:100%">
-        <thead>
-        <th>Question</th>
-        <th>Answers</th>
-        <th>Image Url</th>
-        <th>Reference Link</th>
-        <th>Operation</th>
-        </thead>
-        <tbody>
-            <tr ng-repeat="value in DB">
-                <td>
-                    <span ng-repeat="values in value.Questions track by $index">
-                        <p>{{values}}</p>
-                    </span>
-                </td>
-                <td>
-                    <span ng-repeat="values in value.Answers track by $index">
-                        <p style="width:50%">{{values}}</p>
-                    </span>
-                </td>
-                <td>
-                    <span ng-repeat="values in value.ImageUrls track by $index">
-                        <p>{{values}}</p>
-                    </span>
-                </td>
-                <td>
-                    <span ng-repeat="values in value.ImageUrls track by $index">
-                        <p>{{values}}</p>
-                    </span>
-                </td>
-                <td>
-                    <button type="button" ng-click="edit(value,value.$id)">Edit</button>
-                    <button type="button" ng-click="delete(value.$id)">Delete</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+            </div>
+        </div>
+        <button class="btn btn-primary" ng-click="Save()">
+            Save
+        </button>
+        <button class="btn btn-primary" ng-click="ShowTable=true">Show Table</button>
+        <button class="btn btn-primary" ng-click="ShowTable=false">Hide Table</button>
 
-    <script src="script/angular.min.js"></script>
-    <script src="script/firebase.js"></script>
-    <script src="script/angularfire.min.js"></script>
-    <script>
-        angular.module('app', ["firebase"])
-                .controller('appCtrl', function ($scope, $firebase) {
+        <div class="col-md-6 table-responsive">
+            <div ng-if="ShowTable==true">
+                <input class="form-control" type="text" name="filer" ng-model="filterSearch" placeholder="Please type to Search ......"/>
+                <table style="width:100%" class="table table-bordered table-condensed table-stripped table-stripped ">
+                    <thead>
+                    <th>Question</th>
+                    <th>Answers</th>
+                    <th>Image Url</th>
+                    <th>Reference Link</th>
+                    <th>Online Example</th>
+                    <th>Operation</th>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="value in DB|filter:filterSearch">
+                            <td>
+                                <span ng-repeat="values in value.Questions track by $index">
+                                    <p>{{values}}</p>
+                                </span>
+                            </td>
+                            <td>
+                                <span ng-repeat="values in value.Answers track by $index">
+                                    <p style="width:50%">{{values}}</p>
+                                </span>
+                            </td>
+                            <td>
+                                <span ng-repeat="values in value.OnlineExampleLinks track by $index">
+                                    <p>{{values.ExampleTitle}} -> {{values.ExampleLink}}</p>
+                                </span>
+                            </td>
+                            <td>
+                                <span ng-repeat="values in value.ReferenceLinks track by $index">
+                                    <p>{{values.ReferTitle}}->{{values.ReferLink}}</p>
+                                </span>
+                            </td>
+                            <td>
+                                <span ng-repeat="values in value.ImageUrls track by $index">
+                                    <p>{{values}}</p>
+                                </span>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary" type="button" ng-click="edit(value,value.$id)">Edit</button>
+                                <button class="btn btn-primary" type="button" ng-click="delete(value.$id)">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div ng-if="ShowTable==false">
+                <div>
+                    Language :{{LanguageOption}}
+                    <!--{{app|json}}-->
+                    <br />
+                    <ul class="list-group">
+                        <li class="list-group-item active">
+                            Questions
+                            <span class="badge">{{app.Questions.length}}</span>
+                        </li>
+                        <li class="list-group-item" ng-repeat="ques in app.Questions track by $index">
+                            <b>{{$index+1}})</b> {{ques}} OR
+                        </li>
+                    </ul>
+                    <ul class="list-group">
+                        <li class="list-group-item active">
+                            Answers
+                            <span class="badge">{{app.Answers.length}}</span>
+                        </li>
+                        <li class="list-group-item" ng-repeat="answer in app.Answers track by $index">
+                            <b>{{$index+1}})</b>  {{answer}}
+                        </li>
+                    </ul>                    
+                    <ul class="list-group">
+                        <li class="list-group-item active">
+                            ImageUrl
+                            <span class="badge">{{app.ImageUrls.length}}</span>
+                        </li>
+                        <li class="list-group-item" ng-repeat="imag in app.ImageUrls track by $index">
+                            <b>{{$index+1}})</b>  {{imag}}
+                        </li>
+                    </ul>                    
+                    <ul class="list-group">
+                        <li class="list-group-item active">
+                            Reference Link
+                            <span class="badge">{{app.ReferenceLinks.length}}</span>
+                        </li>
+                        <li class="list-group-item" ng-repeat="refer in app.ReferenceLinks track by $index">
+                            <b>{{$index+1}})</b> {{refer.ReferTitle}} - >  {{refer.ReferLink}}
+                        </li>
+                    </ul>
+                    <ul class="list-group">
+                        <li class="list-group-item active">
+                            Online Example Link
+                            <span class="badge">{{app.OnlineExampleLinks.length}}</span>
+                        </li>
+                        <li class="list-group-item" ng-repeat="refer in app.OnlineExampleLinks track by $index">
+                            <b>{{$index+1}})</b> {{refer.ExampleTitle}} - >  {{refer.ExampleLink}}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
 
 
 
-                    $scope.init = function () {
+        <script src="script/angular.min.js"></script>
+        <script src="script/firebase.js"></script>
+        <script src="script/angularfire.min.js"></script>
+        <script>
+            angular.module('app', ["firebase"])
+                    .controller('appCtrl', function ($scope, $firebase) {
 
-                        $scope.LanguageOption = 'angularjs';
-                        console.log($scope.LanguageOption);
-                    };
-                    $scope.LangOptions = [{
-                        value: 'angularjs',
-                        title: 'Angular JS'
-                    }, {
-                        value: 'mvc',
-                        title: 'MVC'
-                    }, {
-                        value: 'linq',
-                        title: 'LINQ'
-                    }, {
-                        value: 'chsarp',
-                        title: 'C Sharp (C#)'
-                    }];
 
-                    var ref;
-                    //if ($scope.LanguageOption == 'angularjs') {
-                    //    ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/angularjs");
-                    //}
-                    //else if ($scope.LanguageOption == 'mvc') {
-                    //    ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/mvc");
-                    //}
-                    //else if ($scope.LanguageOption == 'linq') {
-                    //    ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/linq");
-                    //}
-                    //else if ($scope.LanguageOption == 'chsarp') {
-                    //    ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/csharp");
-                    //}
-                     
-                    
-                    $scope.LoadData = function (LanOption) {
-                      
-                        console.log(LanOption);
-                        if (LanOption == 'angularjs') {
-                            ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/angularjs");
+                        $scope.ShowTable = false;
+
+                        $scope.init = function () {
+
+                            $scope.LanguageOption = 'angularjs';
+                            console.log($scope.LanguageOption);
+                        };
+                        $scope.LangOptions = [{
+                            value: 'angularjs',
+                            title: 'Angular JS'
+                        }, {
+                            value: 'mvc',
+                            title: 'MVC'
+                        }, {
+                            value: 'linq',
+                            title: 'LINQ'
+                        }, {
+                            value: 'chsarp',
+                            title: 'C Sharp (C#)'
+                        }];
+
+                        var ref;
+                        //if ($scope.LanguageOption == 'angularjs') {
+                        //    ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/angularjs");
+                        //}
+                        //else if ($scope.LanguageOption == 'mvc') {
+                        //    ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/mvc");
+                        //}
+                        //else if ($scope.LanguageOption == 'linq') {
+                        //    ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/linq");
+                        //}
+                        //else if ($scope.LanguageOption == 'chsarp') {
+                        //    ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/csharp");
+                        //}
+
+
+                        $scope.LoadData = function (LanOption) {
+
+                            console.log(LanOption);
+                            if (LanOption == 'angularjs') {
+                                ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/angularjs");
+                            }
+                            else if (LanOption == 'mvc') {
+                                ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/mvc");
+                            }
+                            else if (LanOption == 'linq') {
+                                ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/linq");
+                            }
+                            else if ($scope.LanguageOption == 'chsarp') {
+                                ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/csharp");
+                            }
+
+                            var sync = $firebase(ref);
+                            $scope.DB = sync.$asArray();
                         }
-                        else if (LanOption == 'mvc') {
-                            ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/mvc");
+
+                        $scope.LoadData('angularjs');
+                        //console.log($scope.DB);
+                        $scope.ReferenceLink = [];
+                        $scope.Question = [];
+                        $scope.OnlineExampleLink = [];
+                        $scope.Answer = [];
+                        $scope.Image = [];
+                        $scope.app = { IsApproped: true, AddedbyUser: 'Admin', AddedTimeStap: new Date().valueOf(), NegativeAddedTimeStap: -new Date().valueOf() };
+
+                        $scope.addQuestions = function (Question) {
+                            $scope.Question.push(Question);
+                            $scope.QuestionModel = '';
+                            $scope.app.Questions = $scope.Question;
+                            //console.log($scope.app);
                         }
-                        else if (LanOption == 'linq') {
-                            ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/linq");
+                        $scope.addAnswer = function (AnswerModel) {
+                            $scope.Answer.push(AnswerModel);
+                            $scope.AnswerModel = '';
+                            $scope.app.Answers = $scope.Answer;
+                            //console.log($scope.app);
                         }
-                        else if ($scope.LanguageOption == 'chsarp') {
-                            ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/csharp");
+
+                        $scope.addImage = function (ImageUrl) {
+                            $scope.Image.push(ImageUrl);
+                            $scope.ImageUrl = '';
+                            $scope.app.ImageUrls = $scope.Image;
+                            //console.log($scope.app);
                         }
-                         
-                        var sync = $firebase(ref);
-                        $scope.DB = sync.$asArray();
-                    }
 
-                    $scope.LoadData('angularjs');
-                    //console.log($scope.DB);
-                    $scope.ReferenceLink = [];
-                    $scope.Question = [];
-                    $scope.OnlineExampleLink = [];
-                    $scope.Answer = [];
-                    $scope.Image = [];
-                    $scope.app = { IsApproped: true, AddedbyUser: 'Admin', AddedTimeStap: new Date().valueOf(), NegativeAddedTimeStap: -new Date().valueOf() };
-
-                    $scope.addQuestions = function (Question) {
-                        $scope.Question.push(Question);
-                        $scope.QuestionModel = '';
-                        $scope.app.Questions = $scope.Question;
-                        //console.log($scope.app);
-                    }
-                    $scope.addAnswer = function (AnswerModel) {
-                        $scope.Answer.push(AnswerModel);
-                        $scope.AnswerModel = '';
-                        $scope.app.Answers = $scope.Answer;
-                        //console.log($scope.app);
-                    }
-
-                    $scope.addImage = function (ImageUrl) {
-                        $scope.Image.push(ImageUrl);
-                        $scope.ImageUrl = '';
-                        $scope.app.ImageUrls = $scope.Image;
-                        //console.log($scope.app);
-                    }
-
-                    $scope.addReferenceLink = function (ReferenceLink) {
-                        $scope.ReferenceLink.push(ReferenceLink);
-                        $scope.refer = {};
-                        $scope.app.ReferenceLinks = $scope.ReferenceLink;
-                        //console.log($scope.app);
-                    }
-
-                    $scope.addOnlineExampleLink = function (ExampleLink) {
-                        $scope.OnlineExampleLink.push(ExampleLink);
-                        $scope.onlineExample = {};
-                        $scope.app.OnlineExampleLinks = $scope.OnlineExampleLink;
-                    }
-                    $scope.Save = function () {
-                        if ($scope.LanguageOption != '') {
-                            $scope.DB.$add($scope.app);
-                            $scope.Question = [];
-                            $scope.Answer = [];
-                            $scope.Image = [];
-                            $scope.ReferenceLinks = [];
-                            $scope.app = { IsApproped: true, AddedbyUser: 'Admin', AddedTimeStap: new Date().valueOf(), NegativeAddedTimeStap: -new Date().valueOf() };
+                        $scope.addReferenceLink = function (ReferenceLink) {
+                            $scope.ReferenceLink.push(ReferenceLink);
+                            $scope.refer = {};
+                            $scope.app.ReferenceLinks = $scope.ReferenceLink;
+                            //console.log($scope.app);
                         }
-                        else {
-                            alert('Please select Language from drop down');
+
+                        $scope.addOnlineExampleLink = function (ExampleLink) {
+                            $scope.OnlineExampleLink.push(ExampleLink);
+                            $scope.onlineExample = {};
+                            $scope.app.OnlineExampleLinks = $scope.OnlineExampleLink;
                         }
-                    }
-                    $scope.edit = function (Value, item) {
-                        console.log(Value, item);
-                        $scope.app = item
-                    }
-                    $scope.delete = function (item) {
-                        ref.child(item).remove();
-                    }
+                        $scope.Save = function () {
+                            if ($scope.LanguageOption != '') {
+                                $scope.DB.$add($scope.app);
+                                $scope.Question = [];
+                                $scope.Answer = [];
+                                $scope.Image = [];
+                                $scope.ReferenceLinks = [];
+                                $scope.app = { IsApproped: true, AddedbyUser: 'Admin', AddedTimeStap: new Date().valueOf(), NegativeAddedTimeStap: -new Date().valueOf() };
+                            }
+                            else {
+                                alert('Please select Language from drop down');
+                            }
+                        }
+                        $scope.edit = function (Value, item) {
+                            console.log(Value, item);
+                            $scope.app = item
+                        }
+                        $scope.delete = function (item) {
+                            ref.child(item).remove();
+                        }
 
-                });
+                    });
 
-    </script>
+        </script>
 </body>
 </html>
