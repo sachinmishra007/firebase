@@ -6,24 +6,53 @@
 
 </head>
 <body ng-app="app" ng-controller="appCtrl" ng-init="init()">
-
-    {{app|json}}
+    <div>
+        Language :{{LanguageOption}}
+        <!--{{app|json}}-->
+        <br />
+        Questions :
+        <li ng-repeat="ques in app.Questions track by $index">
+            {{$index+1}} {{ques}} OR
+        </li><br />
+        Answers :
+        <li ng-repeat="answer in app.Answers track by $index">
+            {{$index+1}}  {{answer}}
+        </li><br />
+        ImageUrl:
+        <li ng-repeat="imag in app.ImageUrls track by $index">
+            {{$index+1}}  {{imag}}
+        </li><br />
+        Reference Link:
+        <li ng-repeat="refer in app.ReferenceLinks track by $index">
+            {{$index+1}} {{refer.ReferTitle}} - >  {{refer.ReferLink}}
+        </li><br />
+        Online Example Link:
+        <li ng-repeat="refer in app.OnlineExampleLinks track by $index">
+            {{$index+1}} {{refer.ExampleTitle}} - >  {{refer.ExampleLink}}
+        </li>
+    </div>
     <br />
-    <select ng-model="LanguageOption" ng-options="l.value as l.title for l in LangOptions" ng-change="LoadData(LanguageOption)"></select>
+    <select ng-model="LanguageOption" ng-options="l.value as l.title for l in LangOptions" ng-change="LoadData(LanguageOption)">
+        <option value="" selected>-----------Select------------</option>
+    </select>
     <br />
-    <input type="text" ng-model="QuestionModel" placeholder="Question" />
+    <textarea ng-model="QuestionModel" placeholder="Question"></textarea>
     <button type="button" ng-click="addQuestions(QuestionModel)">+</button>
     <br />
 
-    <input type="text" ng-model="AnswerModel" placeholder="Answer" />
+    <textarea ng-model="AnswerModel" placeholder="Answer"></textarea>
     <button type="button" ng-click="addAnswer(AnswerModel)">+</button>
     <br />
-    <input type="text" ng-model="ImageUrl" placeholder="ImageUrl" />
+    <textarea ng-model="ImageUrl" placeholder="ImageUrl"></textarea>
     <button type="button" ng-click="addImage(ImageUrl)">+</button>
     <br />
-    <input type="text" ng-model="RefeLink" placeholder="ReferenceLink" />
-    <button type="button" ng-click="addReferenceLink(RefeLink)">+</button>
+    <textarea ng-model="refer.ReferTitle" placeholder="ReferenceTitle"></textarea>
+    <textarea ng-model="refer.ReferLink" placeholder="ReferenceLink"></textarea>
+    <button type="button" ng-click="addReferenceLink(refer)">+</button>
     <br />
+    <textarea ng-model="onlineExample.ExampleTitle" placeholder="ExampleTitle"></textarea>
+    <textarea ng-model="onlineExample.ExampleLink" placeholder="ExampleLink"></textarea>
+    <button type="button" ng-click="addOnlineExampleLink(onlineExample)">+</button>
     <button ng-click="Save()">
         Save
     </button>
@@ -96,20 +125,22 @@
                     }];
 
                     var ref;
-                    if ($scope.LanguageOption == 'angularjs') {
-                        ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/angularjs");
-                    }
-                    else if ($scope.LanguageOption == 'mvc') {
-                        ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/mvc");
-                    }
-                    else if ($scope.LanguageOption == 'linq') {
-                        ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/linq");
-                    }
-                    else {
-                        ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/csharp");
-                    }
-
+                    //if ($scope.LanguageOption == 'angularjs') {
+                    //    ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/angularjs");
+                    //}
+                    //else if ($scope.LanguageOption == 'mvc') {
+                    //    ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/mvc");
+                    //}
+                    //else if ($scope.LanguageOption == 'linq') {
+                    //    ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/linq");
+                    //}
+                    //else if ($scope.LanguageOption == 'chsarp') {
+                    //    ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/csharp");
+                    //}
+                     
+                    
                     $scope.LoadData = function (LanOption) {
+                      
                         console.log(LanOption);
                         if (LanOption == 'angularjs') {
                             ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/angularjs");
@@ -120,55 +151,67 @@
                         else if (LanOption == 'linq') {
                             ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/linq");
                         }
-                        else {
+                        else if ($scope.LanguageOption == 'chsarp') {
                             ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/csharp");
                         }
+                         
                         var sync = $firebase(ref);
                         $scope.DB = sync.$asArray();
                     }
 
-                    var sync = $firebase(ref);
-                    $scope.DB = sync.$asArray();
+                    $scope.LoadData('angularjs');
                     //console.log($scope.DB);
                     $scope.ReferenceLink = [];
                     $scope.Question = [];
+                    $scope.OnlineExampleLink = [];
                     $scope.Answer = [];
                     $scope.Image = [];
-                    $scope.app = {};
+                    $scope.app = { IsApproped: true, AddedbyUser: 'Admin', AddedTimeStap: new Date().valueOf(), NegativeAddedTimeStap: -new Date().valueOf() };
 
                     $scope.addQuestions = function (Question) {
                         $scope.Question.push(Question);
                         $scope.QuestionModel = '';
                         $scope.app.Questions = $scope.Question;
-                        console.log($scope.app);
+                        //console.log($scope.app);
                     }
                     $scope.addAnswer = function (AnswerModel) {
                         $scope.Answer.push(AnswerModel);
                         $scope.AnswerModel = '';
                         $scope.app.Answers = $scope.Answer;
-                        console.log($scope.app);
+                        //console.log($scope.app);
                     }
 
                     $scope.addImage = function (ImageUrl) {
                         $scope.Image.push(ImageUrl);
                         $scope.ImageUrl = '';
                         $scope.app.ImageUrls = $scope.Image;
-                        console.log($scope.app);
+                        //console.log($scope.app);
                     }
 
                     $scope.addReferenceLink = function (ReferenceLink) {
                         $scope.ReferenceLink.push(ReferenceLink);
-                        $scope.RefeLink = '';
+                        $scope.refer = {};
                         $scope.app.ReferenceLinks = $scope.ReferenceLink;
-                        console.log($scope.app);
+                        //console.log($scope.app);
+                    }
+
+                    $scope.addOnlineExampleLink = function (ExampleLink) {
+                        $scope.OnlineExampleLink.push(ExampleLink);
+                        $scope.onlineExample = {};
+                        $scope.app.OnlineExampleLinks = $scope.OnlineExampleLink;
                     }
                     $scope.Save = function () {
-                        $scope.DB.$add($scope.app);
-                        $scope.Question = [];
-                        $scope.Answer = [];
-                        $scope.Image = [];
-                        $scope.ReferenceLinks = [];
-                        $scope.app = { AddedDate: '' };
+                        if ($scope.LanguageOption != '') {
+                            $scope.DB.$add($scope.app);
+                            $scope.Question = [];
+                            $scope.Answer = [];
+                            $scope.Image = [];
+                            $scope.ReferenceLinks = [];
+                            $scope.app = { IsApproped: true, AddedbyUser: 'Admin', AddedTimeStap: new Date().valueOf(), NegativeAddedTimeStap: -new Date().valueOf() };
+                        }
+                        else {
+                            alert('Please select Language from drop down');
+                        }
                     }
                     $scope.edit = function (Value, item) {
                         console.log(Value, item);
