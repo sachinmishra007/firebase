@@ -1,0 +1,208 @@
+﻿
+
+<html>
+
+<head>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet" />
+
+</head>
+<body ng-app="app" ng-controller="appCtrl" ng-init="init()">
+
+    <div class="form-group">
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <select class="form-control" ng-model="LanguageOption" ng-options="l.value as l.title for l in LangOptions" ng-change="LoadData(LanguageOption)">
+                        <option value="" selected>-----------Select------------</option>
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <textarea class="form-control" ng-model="QuestionModel.name" placeholder="name"></textarea>
+                    <textarea class="form-control" ng-model="QuestionModel.syntax" placeholder="syntax"></textarea>
+                    <textarea class="form-control" ng-model="QuestionModel.description" placeholder="description"></textarea>
+                    <center><button class="btn  btn-block btn-primary" type="button" ng-click="addQuestions(QuestionModel)">+</button></center>
+                </div>
+
+
+            </div>
+        </div>
+        <button class="btn btn-primary" ng-click="Save()">
+            Save
+        </button>
+        <button class="btn btn-primary" ng-click="ShowTable=true">Show Table</button>
+        <button class="btn btn-primary" ng-click="ShowTable=false">Hide Table</button>
+
+        <div class="col-md-6 table-responsive">
+            <div ng-if="ShowTable==true">
+                <input class="form-control" type="text" name="filer" ng-model="filterSearch" placeholder="Please type to Search ......" />
+                <table style="width:100%" class="table table-bordered table-condensed table-stripped table-stripped ">
+                    <thead>
+                    <th>Question</th>
+
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="value in DB">
+                            <td>
+                                <span ng-repeat="values in value.FunctionDetails|filter:filterSearch track by $index">
+                                    <p>{{values.description+' '+values.name+' '+values.syntax}}</p>
+                                </span>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div ng-if="ShowTable==false">
+                <div>
+                    Language :{{LanguageOption}}
+                    <!--{{app|json}}-->
+                    <br />
+                    <ul class="list-group">
+                        <li class="list-group-item active">
+                            Questions
+                            <span class="badge">{{app.Questions.length}}</span>
+                        </li>
+                        <li class="list-group-item" ng-repeat="ques in app.FunctionDetails track by $index">
+                            <p> <b>{{$index+1}})</b> &nbsp;&nbsp;&nbsp;{{ques.description+' '+ques.name+' '+ques.syntax}}</p>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <script src="script/angular.min.js"></script>
+        <script src="script/firebase.js"></script>
+        <script src="script/angularfire.min.js"></script>
+        <script>
+            angular.module('app', ["firebase"])
+                    .controller('appCtrl', function ($scope, $firebase) {
+
+
+                        $scope.ShowTable = false;
+
+                        $scope.init = function () {
+
+                            $scope.LanguageOption = 'angularjs';
+                            console.log($scope.LanguageOption);
+                        };
+                        $scope.LangOptions = [{
+                            value: 'angularjs',
+                            title: 'Angular JS'
+                        }, {
+                            value: 'mvc',
+                            title: 'MVC'
+                        }, {
+                            value: 'linq',
+                            title: 'LINQ'
+                        }, {
+                            value: 'chsarp',
+                            title: 'C Sharp (C#)'
+                        }];
+
+                        var ref;
+                        //if ($scope.LanguageOption == 'angularjs') {
+                        //    ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/angularjs");
+                        //}
+                        //else if ($scope.LanguageOption == 'mvc') {
+                        //    ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/mvc");
+                        //}
+                        //else if ($scope.LanguageOption == 'linq') {
+                        //    ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/linq");
+                        //}
+                        //else if ($scope.LanguageOption == 'chsarp') {
+                        //    ref = new Firebase("https://interviewpreparation-53102.firebaseio.com/csharp");
+                        //}
+
+
+                        $scope.LoadData = function (LanOption) {
+
+                            console.log(LanOption);
+                            if (LanOption == 'angularjs') {
+                                ref = new Firebase("http://forumapp-28f01.firebaseio.com/langFunctions/angularjs");
+                            }
+                            else if (LanOption == 'mvc') {
+                                ref = new Firebase("http://forumapp-28f01.firebaseio.com/langFunctions/mvc");
+                            }
+                            else if (LanOption == 'linq') {
+                                ref = new Firebase("http://forumapp-28f01.firebaseio.com/langFunctions/linq");
+                            }
+                            else if ($scope.LanguageOption == 'chsarp') {
+                                ref = new Firebase("http://forumapp-28f01.firebaseio.com/langFunctions/csharp");
+                            }
+
+                            var sync = $firebase(ref);
+                            $scope.DB = sync.$asArray();
+                            console.log($scope.DB)
+                        }
+
+                        $scope.LoadData('angularjs');
+                        //console.log($scope.DB);
+                        $scope.ReferenceLink = [];
+                        $scope.Question = [];
+                        $scope.OnlineExampleLink = [];
+                        $scope.Answer = [];
+                        $scope.Image = [];
+                        $scope.app = { FunctionDetails: [], IsApproped: true, AddedbyUser: 'Admin', AddedTimeStap: new Date().valueOf(), NegativeAddedTimeStap: -new Date().valueOf() };
+
+                        $scope.addQuestions = function (Question) {
+                            $scope.Question.push(Question);
+                            $scope.QuestionModel = '';
+                            $scope.app.FunctionDetails = $scope.Question;
+                            console.log($scope.app);
+                        }
+                        $scope.addAnswer = function (AnswerModel) {
+                            $scope.Answer.push(AnswerModel);
+                            $scope.AnswerModel = '';
+                            $scope.app.Answers = $scope.Answer;
+                            //console.log($scope.app);
+                        }
+
+                        $scope.addImage = function (ImageUrl) {
+                            $scope.Image.push(ImageUrl);
+                            $scope.ImageUrl = '';
+                            $scope.app.ImageUrls = $scope.Image;
+                            //console.log($scope.app);
+                        }
+
+                        $scope.addReferenceLink = function (ReferenceLink) {
+                            $scope.ReferenceLink.push(ReferenceLink);
+                            $scope.refer = {};
+                            $scope.app.ReferenceLinks = $scope.ReferenceLink;
+                            //console.log($scope.app);
+                        }
+
+                        $scope.addOnlineExampleLink = function (ExampleLink) {
+                            $scope.OnlineExampleLink.push(ExampleLink);
+                            $scope.onlineExample = {};
+                            $scope.app.OnlineExampleLinks = $scope.OnlineExampleLink;
+                        }
+                        $scope.Save = function () {
+                            if ($scope.LanguageOption != '') {
+                                console.log('Saved');
+                                $scope.DB.$add($scope.app);
+                                $scope.Question = [];
+                                $scope.app = { FunctionDetails: [], IsApproped: true, AddedbyUser: 'Admin', AddedTimeStap: new Date().valueOf(), NegativeAddedTimeStap: -new Date().valueOf() };
+                            }
+                            else {
+                                alert('Please select Language from drop down');
+                            }
+                        }
+                        $scope.edit = function (Value, item) {
+                            console.log(Value, item);
+                            $scope.app = item
+                        }
+                        $scope.delete = function (item) {
+                            ref.child(item).remove();
+                        }
+
+                    });
+
+        </script>
+</body>
+</html>
